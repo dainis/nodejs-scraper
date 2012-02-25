@@ -82,7 +82,7 @@ var scrapeList = function(urls, b, c) {
  		request(requestParameters, function(err, response, body) {
 
 	 		if(urls.length !== 0) {
-	 			urlStack.push(urls.pop())
+	 			urlStack.push(urls.shift())
 	 		}
 
  			if(err || response.statusCode != 200) {
@@ -146,7 +146,7 @@ var scrapeList = function(urls, b, c) {
  	for(var i = 0; i < options.paralel && i < url_cnt; i++) {
 
  		(function() {
-	 		var url = urls.pop();
+	 		var url = urls.shift();
 
 			if(options.hammerIt) {
 				process.nextTick(function(){
