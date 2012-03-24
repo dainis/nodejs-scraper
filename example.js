@@ -4,7 +4,7 @@ var links = [
 'news.ycombinator.com'
 ];
 
-scraper.scrapeList(links, {hammerIt: true, timeout: 400}, function(err, $, link){
+scraper.scrapeList(links, {hammerIt: true, timeout: 400, onAllComplete: function() {console.log('completed')}}, function(err, $, link){
 
 	if(err) {
 		console.log(err.message);

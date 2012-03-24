@@ -43,7 +43,8 @@ var scrapeList = function(urls, b, c) {
  			'User-Agent': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)'
  		},
  		jQueryUrl: 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js',
- 		additionalScripts: []
+ 		additionalScripts: [],
+ 		onAllComplete: function(){}
  	};
 
  	//Magic to swap parameters around, enables options to be passed before callback, but also let them be left out
@@ -60,6 +61,8 @@ var scrapeList = function(urls, b, c) {
 
  	var request = require('request');
  	var jsdom = require('jsdom');
+
+ 	var urlListCompleted = false;
 
  	/**
  	 * Performs web page scraping
@@ -102,6 +105,11 @@ var scrapeList = function(urls, b, c) {
 	 					else {
 	 						callback(err, window.jQuery, link);
 	 					}
+
+	 					if(urlListCompleted) {
+	 						options.onAllComplete();
+	 					}
+
 	 					//Window must be closed otherwise jsom leaks quite baddly
 	 					if(window) {
 	 						//Hack, otherwise exception is thrown, looks like in background jsdom is still performing some actions
@@ -127,6 +135,9 @@ var scrapeList = function(urls, b, c) {
 		if(urlStack.length === 0) {
 			if(urls.length !== 0) {
 				process.nextTick(timeoutedCall);
+			}
+			else {
+				urlListCompleted = true;
 			}
 			return;
 		}
